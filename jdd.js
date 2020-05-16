@@ -963,11 +963,8 @@ var jdd = {
         var loadUrl = function (id, errId) {
             if ($('#' + id).val().trim().substring(0, 4).toLowerCase() === 'http') {
                 jdd.requestCount++;
-                $.post('proxy.php',
-                    {
-                        'url': $('#' + id).val().trim()
-                    }, function (responseObj) {
-                        if (responseObj.error) {
+                $.get( $('#' + id).val().trim(), function(data) {
+				if (responseObj.error) {
                             $('#' + errId).text(responseObj.result).show();
                             $('#' + id).addClass('error');
                             $('body').removeClass('progress');
@@ -977,7 +974,10 @@ var jdd = {
                             jdd.requestCount--;
                             jdd.compare();
                         }
-                    }, 'json');
+			    })  	
+			    .fail(function(at) {				
+				    alert( "error" + at);
+			    })
                 return true;
             } else {
                 return false;
